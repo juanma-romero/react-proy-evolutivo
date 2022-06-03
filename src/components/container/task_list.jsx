@@ -1,12 +1,16 @@
 import React, {useState, useEffect} from 'react';
 import { LEVELS } from '../../models/levels.enum';
 import { Task } from '../../models/task.class';
+import TaskForm from '../pure/forms/taskForm';
 import TaskComponent from '../pure/task';
 
 const TaskListComponent = () => {
-    const defaultTask = new Task('Example', 'default description', false, LEVELS.NORMAL);
+    const defaultTask1 = new Task('Example1', 'Description1', false, LEVELS.NORMAL);
+    const defaultTask2 = new Task('Example2', 'Description2', true, LEVELS.BLOCKING);
+    const defaultTask3 = new Task('Example3', 'Description3', false, LEVELS.URGENT);
 
-    const [task, setTask] = useState(defaultTask);
+
+    const [task, setTask] = useState([defaultTask1, defaultTask2, defaultTask3]);
     const [loading, setloading] = useState(true);
 
     //controlar ciclo de vida del compo
@@ -42,11 +46,20 @@ const TaskListComponent = () => {
                         </tr>
                         </thead>
                         <tbody>
+                            {task.map((taskInt, index) => {
+                                return (
+                                    <TaskComponent 
+                                        task={taskInt}
+                                        key={index}/>
+                                )
+
+                            })}
                             {/* aplicar map para rendirazar lista*/}
-                            <TaskComponent task={defaultTask}/>
+                            
                         </tbody>
                     </table>
                 </div>
+                <TaskForm />
             </div>
             
         </div>
