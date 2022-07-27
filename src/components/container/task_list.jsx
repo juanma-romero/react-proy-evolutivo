@@ -10,7 +10,7 @@ const TaskListComponent = () => {
     const defaultTask3 = new Task('Example3', 'Description3', false, LEVELS.URGENT);
 
 
-    const [task, setTask] = useState([defaultTask1, defaultTask2, defaultTask3]);
+    const [tasks, setTasks] = useState([defaultTask1, defaultTask2, defaultTask3]);
     const [loading, setloading] = useState(true);
 
     //controlar ciclo de vida del compo
@@ -20,14 +20,32 @@ const TaskListComponent = () => {
         return () => {
             console.log('componete desaparece')
         };
-    }, [task]);
+    }, [tasks]);
 
 
-    const changeState = (id) => {
-        console.log('cambiar estado')
+    function completeTask(task) {
+        console.log('complete this task', task)
+        const index = tasks.indexOf(task)
+        const tempTasks = [...tasks]
+        tempTasks[index].completed = !tempTasks[index].completed
+        setTasks(tempTasks)
     }
 
+    function removeTask(task) {
+        console.log('delete this task', task)
+        const index = tasks.indexOf(task)
+        const tempTasks = [...tasks]
+        tempTasks.splice(index, 1)
+        setTasks(tempTasks)
+    }
     
+    function addTask(task) {
+        console.log('Add task', task)
+        const index = tasks.indexOf(task)
+        const tempTasks = [...tasks]
+        tempTasks.push(task)
+        setTasks(tempTasks)
+    }
 
     return (
         <div className='col-12'>
@@ -39,18 +57,21 @@ const TaskListComponent = () => {
                     <table>
                         <thead>
                         <tr>
-                            <th>Title</th>
-                            <th>Description</th>
-                            <th>Priority</th>
-                            <th>Actions</th>
+                            <th scope='col'>Title</th>
+                            <th scope='col'>Description</th>
+                            <th scope='col'>Priority</th>
+                            <th scope='col'>Actions</th>
                         </tr>
                         </thead>
                         <tbody>
-                            {task.map((taskInt, index) => {
+                            {tasks.map((taskInt, index) => {
                                 return (
                                     <TaskComponent 
                                         task={taskInt}
-                                        key={index}/>
+                                        key={index}
+                                        complete={completeTask}
+                                        remove={removeTask}
+                                        />
                                 )
 
                             })}
@@ -59,9 +80,11 @@ const TaskListComponent = () => {
                         </tbody>
                     </table>
                 </div>
-                <TaskForm />
+                
             </div>
-            
+            <TaskForm
+                add={addTask}
+            />
         </div>
     );
 }

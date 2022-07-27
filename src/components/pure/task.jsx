@@ -10,7 +10,7 @@ import '../../styles/task.scss'
 
 
 
-const TaskComponent = ({task}) => {
+const TaskComponent = ({task, complete, remove}) => {
     useEffect(() => {
         console.log('created task')
         return () => {
@@ -33,15 +33,15 @@ const TaskComponent = ({task}) => {
                     <h6 className='mb-0'><span className='badge bg-danger'>{task.level}</span></h6>
                 )                     
             default:
-                break;
+                break; 
         }
     }
 
     function taskCompletedIcon() {
         if (task.completed) {
-            return (<i className='bi-toggle-on' style={{color: 'green'}}></i>)
+            return (<i onClick={() => complete(task)} className='bi-toggle-on task-action' style={{color: 'green'}}></i>)
         } else {
-            return (<i className='bi-toggle-off' style={{color: 'grey'}}></i>)
+            return (<i onClick={() => complete(task)} className='bi-toggle-off task-action' style={{color: 'grey'}}></i>)
         }
     }
 
@@ -58,14 +58,16 @@ const TaskComponent = ({task}) => {
             </td>
             <td className='align-middle'>
                 {taskCompletedIcon()}
-            <i className='bi-trash' style={{color: 'tomato'}}></i>
+            <i className='bi-trash task-action' onClick={() => remove(task)} style={{color: 'tomato'}}></i>
             </td>
         </tr>
     );
 }
 
 TaskComponent.propTypes = {
-    task: PropTypes.instanceOf(Task)
+    task: PropTypes.instanceOf(Task).isRequired,
+    complete: PropTypes.func.isRequired,
+    remove: PropTypes.func.isRequired
 }
 
 
